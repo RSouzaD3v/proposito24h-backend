@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
-    "test": "jest",
-    "test:unit": "jest --testPathPattern=unit",
-    "test:e2e": "jest --testPathPattern=e2e"
+    "build": "tsc",
+    "migrate": "prisma migrate deploy",
+    "start": "npm run migrate && node dist/server.js"
   },
   "keywords": [],
   "author": "",
