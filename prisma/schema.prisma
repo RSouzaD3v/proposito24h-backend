@@ -1,0 +1,134 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+
+enum Role {
+  ADMIN
+  WRITER
+  READER
+}
+enum Status {
+  ACTIVE
+  INACTIVE
+  BLOCKED
+}
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  avatar    String?  // Imagem do perfil
+  bio String?
+  password  String
+  role      Role     @default(READER) // Writer e Reader tem as mesmas permissões.   
+  status    Status   @default(ACTIVE)
+  lastAccess DateTime?
+  interest String[] // Orações, Estudos, Superação...
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dailySequences DailySequence[]
+  books Book[]
+  proofPurchases ProofPurchase[]
+
+  @@index([role])
+}
+
+model DailySequence {
+  id String @id @default(uuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  diariesRead DailyRead[]
+  recordSequence Int
+}
+model DailyRead {
+  id String @id @default(uuid())
+  date DateTime
+  dailySequenceId String
+  dailySequence DailySequence @relation(fields: [dailySequenceId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum DifficultyLevel {
+  EASY
+  MEDIUM
+  HARD
+}
+enum Mode {
+  PUBLISHED
+  SKETCH
+}
+model Book {
+  id String @id @default(uuid())
+  title String
+  description String
+  verseGuide String?
+  coverImage String // Imagem de capa
+  userId String // Author
+  user User @relation(fields: [userId], references: [id])
+  authorName String
+  bookPrice Float
+  category String
+  tags String[]
+  readingTime Int
+  difficultyLevel DifficultyLevel @default(EASY)
+  mode Mode @default(SKETCH)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  pages Page[]
+  quizzes Quiz[]
+  proofPurchases ProofPurchase[]
+}
+model Page {
+  id String @id @default(uuid())
+  title String
+  introText String?
+  mainVerse String?
+  textVerse String?
+  verseGuide String?
+  referenceDay Int // Dia 01, Dia 02, Dia 03...
+  contentMain String
+  practicalApplication String
+  prayer String
+  pageOrder Int // Número da página para fazer a ordem de exibição
+
+  bookId String
+  book Book @relation(fields: [bookId], references: [id])
+}
+
+model Quiz {
+  id String @id @default(uuid())
+  title String
+  description String
+  bookId String
+  book Book @relation(fields: [bookId], references: [id])
+}
+model Question {
+  id String @id @default(uuid())
+  question String
+  option Option[]
+}
+model Option {
+  id String @id @default(uuid())
+  option String
+  isCorrect Boolean @default(false)
+  questionId String
+  question Question @relation(fields: [questionId], references: [id])
+}
+
+model ProofPurchase {
+  id String @id @default(uuid())
+  bookId String
+  book Book @relation(fields: [bookId], references: [id])
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  datePurchase DateTime
+  createdAt DateTime @default(now())
+} // Relação de compra para validar se o livro foi comprado.
