@@ -34,6 +34,8 @@ model User {
 
   dailySequences DailySequence[]
   books Book[]
+  readPlans ReadPlan[]
+  insightsRead InsightsRead[]
   proofPurchases ProofPurchase[]
 
   @@index([role])
@@ -84,6 +86,7 @@ model Book {
 
   pages Page[]
   quizzes Quiz[]
+  readingSchedule ReadingSchedule[]
   proofPurchases ProofPurchase[]
 }
 model Page {
@@ -123,6 +126,37 @@ model Option {
   question Question @relation(fields: [questionId], references: [id])
 }
 
+model ReadPlan {
+  id String @id @default(uuid())
+  title String
+  duration Int
+  description String?
+  authorId String
+  author User @relation(fields: [authorId], references: [id])
+  readingShedules ReadingSchedule[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model ReadingSchedule {
+  id String @id @default(uuid())
+  titleDay String
+  bookId String
+  book Book @relation(fields: [bookId], references: [id])
+  readPlanId String
+  readPlan ReadPlan @relation(fields: [readPlanId], references: [id])
+  insightsRead InsightsRead[]
+}
+model InsightsRead {
+  id String @id @default(uuid())
+  isReaded Boolean @default(false)
+  isFinished Boolean @default(false)
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  readingSheduleId String
+  readingShedule ReadingSchedule @relation(fields: [readingSheduleId], references: [id])
+}
+
+
 model ProofPurchase {
   id String @id @default(uuid())
   bookId String
@@ -130,5 +164,6 @@ model ProofPurchase {
   userId String
   user User @relation(fields: [userId], references: [id])
   datePurchase DateTime
+  methodPayment String? @default("Dinheiro")
   createdAt DateTime @default(now())
 } // Relação de compra para validar se o livro foi comprado.
