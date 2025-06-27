@@ -111,11 +111,15 @@ model Quiz {
   title String
   description String
   bookId String
-  book Book @relation(fields: [bookId], references: [id])
+  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  questions Question[]
 }
 model Question {
   id String @id @default(uuid())
   question String
+  quizId String
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
   option Option[]
 }
 model Option {
@@ -123,7 +127,7 @@ model Option {
   option String
   isCorrect Boolean @default(false)
   questionId String
-  question Question @relation(fields: [questionId], references: [id])
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
 
 model ReadPlan {
@@ -132,7 +136,7 @@ model ReadPlan {
   duration Int
   description String?
   authorId String
-  author User @relation(fields: [authorId], references: [id])
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   readingShedules ReadingSchedule[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -143,7 +147,8 @@ model ReadingSchedule {
   bookId String
   book Book @relation(fields: [bookId], references: [id])
   readPlanId String
-  readPlan ReadPlan @relation(fields: [readPlanId], references: [id])
+  referenceDay String
+  readPlan ReadPlan @relation(fields: [readPlanId], references: [id], onDelete: Cascade)
   insightsRead InsightsRead[]
 }
 model InsightsRead {
@@ -151,9 +156,9 @@ model InsightsRead {
   isReaded Boolean @default(false)
   isFinished Boolean @default(false)
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   readingSheduleId String
-  readingShedule ReadingSchedule @relation(fields: [readingSheduleId], references: [id])
+  readingShedule ReadingSchedule @relation(fields: [readingSheduleId], references: [id], onDelete: Cascade)
 }
 
 
