@@ -11,6 +11,7 @@ import cors from "cors";
 import authRoutes from './routes/AuthRoutes';
 import devocionalRoutes from "./routes/DevocionalRoutes";
 import readPlanRoutes from "./routes/ReadPlanRoutes";
+import quizRoutes from "./routes/QuizRoutes";
 
 // CORS
 app.use(cors({
@@ -27,7 +28,7 @@ app.use('/auth', bodyParser.json(), bodyParser.urlencoded({ extended: true }), a
 // 👉 Rotas com upload (usam multer): **não aplicar bodyParser**
 app.use('/devocional', devocionalRoutes);
 
-
+app.use('/quiz', quizRoutes);
 app.use('/read-plan', readPlanRoutes);
 
 const server = http.createServer(app);
