@@ -92,8 +92,8 @@ export class DevocionalService {
         return await this.devocionalRepository.findByUserId(userId);
     }
 
-    async findAllDevocionais() {
-        return await this.devocionalRepository.findAll();
+    async findAllDevocionais(userId: string) {
+        return await this.devocionalRepository.findAll(userId);
     }
 
     async findDevocionalByCategory(category: string) {

@@ -86,7 +86,8 @@ export class ReadPlan {
 
         const readPlan = await db.readPlan.findUnique({
             where: {
-                id
+                id,
+                authorId: userId
             }
         })
 
@@ -96,7 +97,8 @@ export class ReadPlan {
 
         const updatedReadPlan = await db.readPlan.update({
             where: {
-                id: readPlan?.id
+                id: readPlan?.id,
+                authorId: userId
             },
             data: {
                 title: title || readPlan?.title,
@@ -105,7 +107,7 @@ export class ReadPlan {
             }
         })
 
-        res.status(200).json({ message: "Atualizado" })
+        res.status(200).json({ message: "Atualizado", updatedReadPlan })
     }
 
     async deleteDay (req: Request, res: Response) {

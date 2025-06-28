@@ -18,8 +18,12 @@ export class DevocionalRepository {
         return await db.book.findMany({ where: { userId } });
     }
 
-    async findAll(): Promise<Book[]> {
-        return await db.book.findMany();
+    async findAll(userId: string): Promise<Book[]> {
+        return await db.book.findMany({
+            where: {
+                userId: userId
+            }
+        });
     }
 
     async findByCategory(category: string): Promise<Book[]> {

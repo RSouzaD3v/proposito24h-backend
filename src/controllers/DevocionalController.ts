@@ -9,7 +9,7 @@ const devocionalService = new DevocionalService();
 export class DevocionalController {
     async getAll(req: Request, res: Response): Promise<void> {
         try {
-            const devocionais = await devocionalService.findAllDevocionais();
+            const devocionais = await devocionalService.findAllDevocionais(req.user?.id as string);
             res.json(devocionais);
         } catch (error) {
             res.status(500).json({ message: 'Erro ao buscar devocionais.' });
@@ -25,7 +25,7 @@ export class DevocionalController {
         }
 
         try {
-            const devocionais = await devocionalService.findAllDevocionais();
+            const devocionais = await devocionalService.findAllDevocionais(userId);
             res.json(devocionais);
         } catch (error) {
             res.status(500).json({ message: 'Erro ao buscar devocionais.' });
