@@ -5,7 +5,7 @@ import { authMiddleware } from '../middlewares/authMiddleware';
 const router = Router();
 const bookController = new BookController();
 
-// ✅ Opcional: proteção com login
+// ✅ proteção com login
 router.use(authMiddleware);
 
 // GET /devocional/books/available

@@ -13,6 +13,7 @@ import devocionalRoutes from "./routes/DevocionalRoutes";
 import readPlanRoutes from "./routes/ReadPlanRoutes";
 import quizRoutes from "./routes/QuizRoutes";
 import bookRoutes from './routes/BookRoutes';
+import adminRoutes from './routes/AdminRoutes';
 
 // CORS
 app.use(cors({
@@ -23,15 +24,13 @@ app.use(cors({
 app.use(cookieParser());
 app.use(compression());
 
-// 👉 Body-parser só para rotas que **não usam FormData**
+app.use('/admin', adminRoutes);
+
 app.use('/auth', bodyParser.json(), bodyParser.urlencoded({ extended: true }), authRoutes);
 
-// 👉 Rotas com upload (usam multer): **não aplicar bodyParser**
 app.use('/devocional', devocionalRoutes);
-
 app.use('/quiz', quizRoutes);
 app.use('/read-plan', readPlanRoutes);
-
 app.use('/devocional/books', bookRoutes);
 
 const server = http.createServer(app);
